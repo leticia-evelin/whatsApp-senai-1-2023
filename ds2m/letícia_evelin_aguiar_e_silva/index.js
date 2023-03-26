@@ -1,10 +1,12 @@
  'use strict'
 
 
- import { contatos } from "https://fernandoleonid.github.io/whatsApp-senai-1-2023/recursos/contatos.js"
+ //import { contatos } from "https://fernandoleonid.github.io/whatsApp-senai-1-2023/recursos/contatos.js"
 
- //const teste = (indice) => console.log(`oi ${contatos[indice].image}`)
+ import {getUsuarios} from "./api.js"
 
+ let contatos = await getUsuarios();
+ console.log(contatos);
 
  const criarCard = (contato, indice) =>{
     const card = document.createElement( 'div' )
@@ -35,13 +37,18 @@
     return card
    }
 
- const carregarApp = () => {
+ const carregarApp = async () => {
+  let url = "http://localhost:8080/v2/senai/contato/1"
+
+  let response = await fetch(url);
+  let data = await response.json();
+  let contatos = data.contatos;
+
    const container = document.getElementById( 'container' )
    const cards = contatos.map( criarCard )
 
-   container.append(...cards)
+   container.replaceChildren(...cards)
 }
- carregarApp()
 
 
  const getMessages = (messages) => {
@@ -80,4 +87,4 @@
   mensagemContato.replaceChildren(...mensagem)
 }
 
-carregarMensagens()
+carregarApp()
